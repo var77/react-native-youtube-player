@@ -13,21 +13,20 @@ export function downloadMusic(song) {
       let dirs = RNFetchBlob.fs.dirs;
       const songRes = await RNFetchBlob
                       .config({
-                        path: `${dirs.DocumentDir}/${song.id}.mp3`
+                        path: `${dirs.DocumentDir}/${song.id}.ogg`
                       })
-                      .fetch('GET', song.path, {
-                      })
+                      .fetch('GET', song.path, {})
                       .progress((received, total) => {
                         dispatch(setProgress(received / total, song.id));
-                      })
+                      });
+
         const headers = songRes.respInfo.headers;
         if(!Utils.isAudioObject(headers['Content-Type'])) return;
         const imgRes = await RNFetchBlob
                         .config({
                           path: `${dirs.DocumentDir}/${song.id}.jpg`
                         })
-                        .fetch('GET', song.thumb, {
-                        });
+                        .fetch('GET', song.thumb, {});
         song.downloading = false;
         let newSong = {...song};
         newSong.path = songRes.path();
