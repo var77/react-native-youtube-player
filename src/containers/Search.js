@@ -20,13 +20,13 @@ class Search extends Component {
   state = {searchQuery: '', page: 'search'}
 
   componentDidMount() {
-    this.props.getSongs();
+    //this.props.getSongs();
   }
 
   render() {
     return (
       <View style={{flex: 1}}>
-        <View style={[Styles.homeContainer, {paddingBottom: 50}]}>
+        <View style={[Styles.homeContainer, {paddingBottom: 100}]}>
           <View style={Styles.searchInputContainer}>
             <Hideo
               iconClass={FontAwesome}

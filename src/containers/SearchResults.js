@@ -18,8 +18,21 @@ import * as Utils from '../helpers/utils';
 
 class SearchResults extends Component {
 
-  songClick(data, index, downloaded) {
-    Actions.player({searchedSongs: this.props.searchResults, songIndex: index, onMusicDownload: this.props.downloadMusic.bind(this), downloaded, search: true})
+  async songClick(data, index, downloaded) {
+    if(!downloaded) {
+      let song = this.props.searchResults[index];
+      if(song) {
+        try {
+          let songInfo = await Utils.getSongInfo(song.path);
+          song.path = songInfo.url;
+          song.pathChanged = true;
+        } catch(err) {
+          console.warn(err);
+        }
+
+      }
+    }
+    this.props.setPlayingSong(index, this.props.searchResults);
   }
 
   render() {
@@ -55,7 +68,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(store) {
     return {
-      searchResults: store.searchResults
+      searchResults: store.searchResults,
+      songs: store.songs
     }
 }
 

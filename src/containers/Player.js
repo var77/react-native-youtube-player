@@ -3,6 +3,7 @@ import {
   Image,
   Text,
   View,
+  TouchableOpacity,
   Dimensions,
   Platform
 } from 'react-native';
@@ -18,6 +19,8 @@ import * as Utils from '../helpers/utils';
 import {ForwardButton, BackwardButton, PlayButton, ShuffleButton, VolumeButton, DownloadButton, SongSlider} from '../components/PlayerButtons';
 import MusicControl from 'react-native-music-control';
 import * as Progress from 'react-native-progress';
+import Icon from 'react-native-vector-icons/Ionicons';
+import _ from 'underscore';
 
 let {height, width} = Dimensions.get('window');
 
@@ -25,28 +28,16 @@ class Player extends Component {
   constructor(props){
     super(props);
     this.state = {
-      playing: true,
       muted: false,
       shuffle: false,
       sliding: false,
       currentTime: 0,
-      songIndex: props.songIndex,
-      songs: props.searchedSongs || this.props.songs
+      minimized: true
     };
   }
 
-  setPlayingSong(duration) {
-    let song = this.state.songs[this.state.songIndex];
-    MusicControl.setNowPlaying({
-      title: song.title,
-      artwork: song.thumb,
-      artist: song.artist,
-      duration
-    });
-  }
-
-  togglePlay(){
-    this.setState({ playing: !this.state.playing });
+  togglePlay() {
+    this.props.togglePlay(!this.props.playing);
   }
 
   toggleVolume(){
@@ -54,49 +45,43 @@ class Player extends Component {
   }
 
   toggleShuffle(){
-    this.setState({ shuffle: !this.state.shuffle });
-  }
-
-  goBackward(){
-    if(this.state.currentTime < 3 && this.state.songIndex !== 0 ){
-      this.setState({
-        songIndex: this.state.songIndex - 1,
-        currentTime: 0,
-      });
+    return this.setState({shuffle: !this.state.shuffle});
+    //TODO
+    if(this.state.shuffle) {
+      this.props.setPlaylist(this.state.originalSongs);
     } else {
-      this.refs.audio.seek(0);
-      this.setState({
-        currentTime: 0,
-      });
+      this.setState({originalSongs: this.props.songs});
+      let shuffledSongs = _.shuffle(this.props.songs);
+      let newIndex = _.findIndex(shuffledSongs, {id: this.props.songs[this.props.songIndex].id});
+      let songToChangeIndex = shuffledSongs[this.props.songIndex];
+      shuffledSongs[this.props.songIndex] = this.props.songs[this.props.songIndex];
+      shuffledSongs[newIndex] = songToChangeIndex;
+      this.props.setPlaylist(shuffledSongs);
     }
   }
 
-  goForward(){
-    if(this.state.shuffle || this.state.songIndex + 1 != this.state.songs.length) {
-      this.setState({
-        songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
-        currentTime: 0,
-        playing: true
-      });
-      this.refs.audio.seek(0);
-    }
+  goBackward() {
+    this.props.goBackward();
+  }
+
+  goForward() {
+    let index = this.state.shuffle? this.randomSongIndex() : null;
+    this.props.goForward(index);
   }
 
   randomSongIndex(){
-    let maxIndex = this.state.songs.length - 1;
-    return Math.floor(Math.random() * (maxIndex - 0 + 1)) + 0;
+    let index = Math.floor(Math.random() * 1000000000) % this.props.songs.length;
+    if(index == this.props.songIndex && this.props.songs.length !== 1) {
+      return this.randomSongIndex();
+    }
+    return index;
   }
 
   setTime(params) {
     if( !this.state.sliding ){
+      this.props.setTime(params);
       this.setState({ currentTime: params.currentTime });
     }
-  }
-
-  onLoad(params) {
-    let duration = params.duration / 2; //react-native-vide bug
-    this.setState({ songDuration: duration });
-    this.setPlayingSong(duration);
   }
 
   onSlidingStart(){
@@ -104,71 +89,25 @@ class Player extends Component {
   }
 
   onSlidingChange(value){
-    let newPosition = value * this.state.songDuration;
+    let newPosition = value * this.props.duration;
     this.setState({ currentTime: newPosition });
   }
 
   onSlidingComplete(){
-    this.refs.audio.seek( this.state.currentTime );
+    this.props.onSlidingComplete(this.state.currentTime);
     this.setState({ sliding: false });
   }
 
   onEnd(){
+    this.props.onEnd();
     this.setState({ playing: false });
-  }
-
-  renderVideoPlayer() {
-    if(this.state.songs[this.state.songIndex]) {
-    return (<Video
-              source={{uri: this.state.songs[this.state.songIndex].path }}
-              volume={this.state.muted ? 0 : 1.0}
-              muted={false}
-              ref="audio"
-              paused={!this.state.playing}
-              playInBackground={true}
-              onLoad={ this.onLoad.bind(this) }
-              onProgress={ this.setTime.bind(this) }
-              onEnd={ this.onEnd.bind(this) }
-              resizeMode="cover"
-              repeat={false}/>);
-      }
-      return null;
-  }
-
-  async componentDidMount() {
-    if(this.props.search && !this.props.downloaded) {
-      let song = this.state.songs[this.state.songIndex];
-      if(song) {
-        console.log('changing song path');
-        let songInfo = await Utils.getSongInfo(song.path);
-        song.path = songInfo.url;
-        song.pathChanged = true;
-        console.log(song.path);
-      }
-    }
-
-    MusicControl.enableControl('play', true);
-    MusicControl.enableControl('pause', true);
-    MusicControl.enableControl('nextTrack', true);
-    MusicControl.enableControl('previousTrack', true);
-    MusicControl.enableControl('seekForward', false);
-    MusicControl.enableControl('seekBackward', false);
-    MusicControl.enableBackgroundMode(true);
-    MusicControl.on('play', ()=> {
-      this.setState({playing: true});
-    });
-    MusicControl.on('pause', ()=> {
-      this.setState({playing: false});
-    });
-    MusicControl.on('nextTrack', this.goForward.bind(this));
-    MusicControl.on('previousTrack', this.goBackward.bind(this));
   }
 
   songImage = require('../img/music.jpg');
 
   renderProgressBar() {
     if(this.props.searchedSongs) {
-      let song = this.state.songs[this.state.songIndex];
+      let song = this.props.songs[this.props.songIndex];
       return <Progress.Bar progress={this.props.progreses[song.id]} width={width} color="#fff" borderColor="transparent"/>
     }
     return null
@@ -176,18 +115,16 @@ class Player extends Component {
 
   render() {
     let songPercentage;
-    if( this.state.songDuration !== undefined ){
-      songPercentage = this.state.currentTime / this.state.songDuration;
+    if(this.props.duration){
+      songPercentage = this.props.currentTime / this.props.duration;
     } else {
       songPercentage = 0;
     }
-
     return (
       <View style={Styles.container}>
-        {this.renderVideoPlayer()}
         <View style={ Styles.header }>
           <Text style={ Styles.headerText }>
-            {this.state.songs[this.state.songIndex].artist}
+            {this.props.songs[this.props.songIndex].artist}
           </Text>
         </View>
         <View style={ Styles.headerClose }>
@@ -195,24 +132,24 @@ class Player extends Component {
         </View>
         <DownloadButton
           download={this.props.searchedSongs}
-          downloading={this.state.songs[this.state.songIndex].downloading}
+          downloading={this.props.songs[this.props.songIndex].downloading}
           downloaded={this.props.downloaded}
-          downloadMusic={() => this.props.onMusicDownload(this.state.songs[this.state.songIndex], this.state.songs[this.state.songIndex].pathChanged)}
+          downloadMusic={() => this.props.onMusicDownload(this.props.songs[this.props.songIndex], this.props.songs[this.props.songIndex].pathChanged)}
         />
         {this.renderProgressBar()}
         <Image
           style={ Styles.songImage }
-          source={{uri: (Platform.OS == 'android'?"file://": "") + this.state.songs[this.state.songIndex].thumb}}/>
+          source={{uri: (Platform.OS == 'android'?"file://": "") + this.props.songs[this.props.songIndex].thumb}}/>
         <Text style={ Styles.songTitle }>
-          {this.state.songs[this.state.songIndex].title}
+          {this.props.songs[this.props.songIndex].title}
         </Text>
         <SongSlider
           onSlidingStart={this.onSlidingStart.bind(this)}
           onSlidingComplete={ this.onSlidingComplete.bind(this) }
           onValueChange={ this.onSlidingChange.bind(this) }
           value={ songPercentage }
-          songDuration={this.state.songDuration}
-          currentTime={this.state.currentTime}
+          songDuration={this.props.duration}
+          currentTime={this.props.currentTime}
           disabled={true}
         />
         <View style={ Styles.controls }>
@@ -226,12 +163,12 @@ class Player extends Component {
           />
           <PlayButton
             togglePlay={this.togglePlay.bind(this)}
-            playing={this.state.playing}
+            playing={this.props.playing}
           />
           <ForwardButton
-            songs={this.state.songs}
+            songs={this.props.songs}
             shuffle={this.state.shuffle}
-            songIndex={this.state.songIndex}
+            songIndex={this.props.songIndex}
             goForward={this.goForward.bind(this)}
             disabled={this.props.search}
           />
@@ -251,9 +188,13 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(store) {
     return {
-      songs: store.songs,
+      songs: store.playlist,
       searchResults: store.searchResults,
-      progreses: store.progreses
+      progreses: store.progreses,
+      duration: store.songDuration,
+      playing: store.playing,
+      currentTime: store.songProgress,
+      songIndex: store.songIndex
     }
 }
 

@@ -23,7 +23,7 @@ class Downloads extends Component {
   }
 
   onSongPlay(index) {
-    Actions.player({songIndex: index})
+    this.props.setPlayingSong(index, this.props.songs);
   }
 
   deleteSong(index) {
@@ -31,14 +31,12 @@ class Downloads extends Component {
   }
 
   render() {
-    console.log(this.props.songs);
     return (
       <View style={{flex: 1}}>
         <View style={[Styles.homeContainer, {paddingBottom: 50}]}>
           <FlatList
             data={this.props.songs}
-            renderItem={({item, index}) => {console.log(item);
-              return (<Song
+            renderItem={({item, index}) => (<Song
                     key={index}
                     onPress={this.onSongPlay.bind(this, index)}
                     songName={item.title}
@@ -46,7 +44,7 @@ class Downloads extends Component {
                     songImage={item.thumb}
                     deleteSong={this.deleteSong.bind(this, index)}
                     keyExtractor={(item, index) => item.id}
-            />)}}
+            />)}
           />
         </View>
         <BottomTabs page={this.state.page}/>

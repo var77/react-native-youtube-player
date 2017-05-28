@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
     width: width - 30,
     height: 300
   },
+  songImageSmall: {
+    width: 40,
+    height: 40
+  },
   songTitle: {
     color: "white",
     fontFamily: "Helvetica Neue",
@@ -185,6 +189,21 @@ const styles = StyleSheet.create({
   },
   fullWidth: {
     width
+  },
+  playerOverlay: {
+    position: 'absolute',
+    zIndex: 200,
+    bottom: 50,
+    width,
+    height: 50,
+    backgroundColor: 'rgba(0, 0, 0, .5)'
+  },
+  minimizedPlayer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5
   }
 });
 
