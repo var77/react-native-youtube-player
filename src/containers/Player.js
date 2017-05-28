@@ -35,13 +35,13 @@ class Player extends Component {
     };
   }
 
-  setPlayingSong() {
+  setPlayingSong(duration) {
     let song = this.state.songs[this.state.songIndex];
     MusicControl.setNowPlaying({
       title: song.title,
       artwork: song.thumb,
       artist: song.artist,
-      duration: this.state.songDuration
+      duration
     });
   }
 
@@ -93,9 +93,10 @@ class Player extends Component {
     }
   }
 
-  onLoad(params){
-    this.setState({ songDuration: params.duration });
-    this.setPlayingSong();
+  onLoad(params) {
+    let duration = params.duration / 2; //react-native-vide bug
+    this.setState({ songDuration: duration });
+    this.setPlayingSong(duration);
   }
 
   onSlidingStart(){
@@ -114,7 +115,6 @@ class Player extends Component {
 
   onEnd(){
     this.setState({ playing: false });
-    this.setState({playing: true});
   }
 
   renderVideoPlayer() {
@@ -201,6 +201,7 @@ class Player extends Component {
           value={ songPercentage }
           songDuration={this.state.songDuration}
           currentTime={this.state.currentTime}
+          disabled={true}
         />
         <View style={ Styles.controls }>
           <ShuffleButton

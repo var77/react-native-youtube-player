@@ -20,6 +20,7 @@ export default class Downloads extends Component {
   deleteSong(index) {
     this.props.deleteSong(index, this.props.songs[index]);
   }
+
   render() {
     return (
         <ScrollView containerStyle={[Styles.homeContainer, Styles.noPaddingHorizontal]}>

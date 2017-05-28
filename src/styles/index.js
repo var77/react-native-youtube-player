@@ -117,7 +117,9 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     backgroundColor: '#fff',
-    borderRadius: 10 / 2
+    borderRadius: 10 / 2,
+    position: 'absolute',
+    top: 10
   },
   songContainer: {
     width,

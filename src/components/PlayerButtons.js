@@ -62,14 +62,11 @@ export class SongSlider extends Component {
     return (
           <View style={ Styles.sliderContainer }>
             <Slider
-              onSlidingStart={ this.props.onSlidingStart }
-              onSlidingComplete={ this.props.onSlidingComplete }
-              onValueChange={ this.props.onValueChange }
+              { ...this.props }
               minimumTrackTintColor='#fff'
               style={ Styles.slider }
               trackStyle={ Styles.sliderTrack }
-              thumbStyle={ Styles.sliderThumb }
-              value={ this.props.value }/>
+              thumbStyle={ Styles.sliderThumb }/>
 
             <View style={ Styles.timeInfo }>
               <Text style={ Styles.time }>{ Utils.formattedTime(this.props.currentTime)  }</Text>

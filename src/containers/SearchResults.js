@@ -18,7 +18,6 @@ import * as Utils from '../helpers/utils';
 
 class SearchResults extends Component {
   onPress(song) {
-    console.log("onPress")
     this.props.downloadMusic(song);
   }
 

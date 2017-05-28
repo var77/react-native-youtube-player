@@ -17,6 +17,7 @@
 		"react-native-router-flux": "^3.39.2",
 		"react-native-scrollable-tab-view": "^0.6.6",
 		"react-native-slider": "^0.9.1",
+		"react-native-sound": "^0.10.1",
 		"react-native-swipe-out": "^2.0.14",
 		"react-native-textinput-effects": "^0.3.1",
 		"react-native-vector-icons": "^4.1.1",

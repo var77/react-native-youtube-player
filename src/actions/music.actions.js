@@ -11,17 +11,16 @@ export function downloadMusic(song) {
       let songs = await Utils.getSongsFromStorage();
       if(Utils.findSongInCollection(song.id, songs)) return {};
       let dirs = RNFetchBlob.fs.dirs;
+      let songInfo = await getSongInfo(song.path);
       const songRes = await RNFetchBlob
                       .config({
-                        path: `${dirs.DocumentDir}/${song.id}.ogg`
+                        path: `${dirs.DocumentDir}/${song.id}.mp3`
                       })
-                      .fetch('GET', song.path, {})
+                      .fetch('GET', songInfo.url, {})
                       .progress((received, total) => {
                         dispatch(setProgress(received / total, song.id));
                       });
 
-        const headers = songRes.respInfo.headers;
-        if(!Utils.isAudioObject(headers['Content-Type'])) return;
         const imgRes = await RNFetchBlob
                         .config({
                           path: `${dirs.DocumentDir}/${song.id}.jpg`
@@ -82,4 +81,11 @@ export function setProgress(progress, id) {
     progress,
     id
   }
+}
+
+async function getSongInfo(path) {
+  let res = await fetch(path);
+  let data = await res.json();
+  if(data.status) return data;
+  console.warn(data.error);
 }
