@@ -5,12 +5,10 @@ let {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   homeContainer: {
     flex: 1,
-    justifyContent: 'flex-start',
     alignItems: 'center',
-    flexDirection: 'column',
-    paddingTop: 10,
-    paddingHorizontal: 5
-  },
+    paddingBottom: 20,
+    paddingTop: 64,
+    },
   searchInput: {
     height: 20,
     width: width - 150,
@@ -121,7 +119,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10
   },
-  songContainer: {
+  searchSongContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: 60,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f0f0"
+  },
+  downloadSongContainer: {
     width,
     height: 60,
     padding: 10,
@@ -170,6 +177,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  centerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  fullWidth: {
+    width
   }
 });
 

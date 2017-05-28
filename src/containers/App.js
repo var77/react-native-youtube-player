@@ -4,7 +4,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { connect, Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from '../reducers';
-import Home from './Home';
+import Downloads from './Downloads';
+import Search from './Search';
 import Player from './Player';
 
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -16,7 +17,8 @@ export default class App extends Component {
      <Provider store={store}>
        <Router>
          <Scene key="root">
-         <Scene key="home" component={Home} initial hideNavBar hideTabBar/>
+          <Scene key="download" component={Downloads} initial title="Downloads" duration={0} animation="fade"/>
+          <Scene key="search" component={Search} initial title="Search" duration={0} animation="fade"/>
           <Scene key="player" component={Player} hideNavBar hideTabBar/>
          </Scene>
        </Router>

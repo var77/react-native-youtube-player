@@ -50,7 +50,7 @@ export class ShuffleButton extends Component {
 
 export class DownloadButton extends Component {
   render() {
-    if(!this.props.download || this.props.downloading) {
+    if(!this.props.download || this.props.downloading || this.props.downloaded) {
       return  <FontAwesome style={ Styles.downloadButton } name="download" size={25} color="#333" />;
     }
     return  <FontAwesome onPress={ this.props.downloadMusic } style={ Styles.downloadButton } name="download" size={25} color="#fff" />;

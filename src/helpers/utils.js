@@ -53,3 +53,16 @@ export async function getSongsFromStorage() {
   songs = songs || JSON.stringify([]);
   return JSON.parse(songs);
 }
+
+export async function getSongFromStorage(id) {
+  let songs = await AsyncStorage.getItem('songs');
+  songs = songs || JSON.stringify([]);
+  return _.findWhere(JSON.parse(songs), {id});
+}
+
+export async function getSongInfo(path) {
+  let res = await fetch(path);
+  let data = await res.json();
+  if(data.status) return data;
+  console.warn(data.error);
+}

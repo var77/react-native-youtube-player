@@ -135,7 +135,18 @@ class Player extends Component {
       return null;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    if(this.props.search && !this.props.downloaded) {
+      let song = this.state.songs[this.state.songIndex];
+      if(song) {
+        console.log('changing song path');
+        let songInfo = await Utils.getSongInfo(song.path);
+        song.path = songInfo.url;
+        song.pathChanged = true;
+        console.log(song.path);
+      }
+    }
+
     MusicControl.enableControl('play', true);
     MusicControl.enableControl('pause', true);
     MusicControl.enableControl('nextTrack', true);
@@ -185,7 +196,8 @@ class Player extends Component {
         <DownloadButton
           download={this.props.searchedSongs}
           downloading={this.state.songs[this.state.songIndex].downloading}
-          downloadMusic={() => this.props.onMusicDownload(this.state.songs[this.state.songIndex])}
+          downloaded={this.props.downloaded}
+          downloadMusic={() => this.props.onMusicDownload(this.state.songs[this.state.songIndex], this.state.songs[this.state.songIndex].pathChanged)}
         />
         {this.renderProgressBar()}
         <Image

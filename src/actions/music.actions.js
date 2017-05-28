@@ -5,13 +5,16 @@ import * as Utils from '../helpers/utils';
 import {AsyncStorage} from 'react-native';
 import RNFS from 'react-native-fs';
 
-export function downloadMusic(song) {
+export function downloadMusic(song, changedPath) {
+    console.log('downloadMusic', song, changedPath);
     return async (dispatch) => {
-      song.downloading = false;
+      song.downloading = true;
       let songs = await Utils.getSongsFromStorage();
       if(Utils.findSongInCollection(song.id, songs)) return {};
       let dirs = RNFetchBlob.fs.dirs;
-      let songInfo = await getSongInfo(song.path);
+      let songInfo = {url: song.path}
+      if(!changedPath) songInfo = await Utils.getSongInfo(song.path);
+      console.log(songInfo.url);
       const songRes = await RNFetchBlob
                       .config({
                         path: `${dirs.DocumentDir}/${song.id}.mp3`
@@ -20,17 +23,16 @@ export function downloadMusic(song) {
                       .progress((received, total) => {
                         dispatch(setProgress(received / total, song.id));
                       });
-
         const imgRes = await RNFetchBlob
                         .config({
                           path: `${dirs.DocumentDir}/${song.id}.jpg`
                         })
                         .fetch('GET', song.thumb, {});
         song.downloading = false;
-        let newSong = {...song};
-        newSong.path = songRes.path();
-        newSong.thumb = imgRes.path();
-        songs = JSON.stringify([...songs, newSong]);
+        song.downloaded = true;
+        song.path = songRes.path();
+        song.thumb = imgRes.path();
+        songs = JSON.stringify([...songs, song]);
         await AsyncStorage.setItem('songs', songs);
         return dispatch(setSongs(JSON.parse(songs)));
     }
@@ -81,11 +83,4 @@ export function setProgress(progress, id) {
     progress,
     id
   }
-}
-
-async function getSongInfo(path) {
-  let res = await fetch(path);
-  let data = await res.json();
-  if(data.status) return data;
-  console.warn(data.error);
 }
