@@ -41,6 +41,7 @@ class Player extends Component {
   }
 
   toggleVolume(){
+    this.props.setVolume(this.state.muted? 1: 0);
     this.setState({ muted: !this.state.muted });
   }
 
@@ -131,7 +132,7 @@ class Player extends Component {
         <DownloadButton
           download={this.props.searchedSongs}
           downloading={this.props.songs[this.props.songIndex].downloading}
-          downloaded={this.props.downloaded}
+          downloaded={this.props.songs[this.props.songIndex].downloaded}
           downloadMusic={() => this.props.downloadMusic(this.props.songs[this.props.songIndex], this.props.songs[this.props.songIndex].pathChanged)}
         />
         {this.renderProgressBar()}

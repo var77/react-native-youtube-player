@@ -9,6 +9,6 @@ import App from './containers/App';
 const RouterWithRedux = connect()(Router);
 const store = createStore(reducer);
 
-const YoutubePlayer = () => <App />
+const YoutubePlayer = () => <App />;
 
 AppRegistry.registerComponent('YoutubePlayer', () => YoutubePlayer);

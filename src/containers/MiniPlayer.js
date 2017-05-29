@@ -132,7 +132,7 @@ class Player extends Component {
     if(this.props.songs[this.props.songIndex]) {
     return (<Video
               source={{uri: this.props.songs[this.props.songIndex].path }}
-              volume={this.state.muted ? 0 : 1.0}
+              volume={this.props.volume}
               muted={false}
               ref="audio"
               paused={!this.props.playing}
@@ -211,7 +211,8 @@ function mapStateToProps(store) {
       playing: store.playing,
       songs: store.playlist,
       songIndex: store.songIndex,
-      shuffle: store.shuffle
+      shuffle: store.shuffle,
+      volume: store.volume
     }
 }
 

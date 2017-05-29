@@ -71,3 +71,10 @@ export function getSongs() {
       return dispatch(setSongs(songs));
     }
 }
+
+export function setVolume(volume) {
+  return {
+    type: types.SET_VOLUME,
+    volume
+  }
+}

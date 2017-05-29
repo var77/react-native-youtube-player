@@ -36,3 +36,9 @@ export const shuffle = createReducer(false, {
     return action.status;
   }
 })
+
+export const volume = createReducer(1, {
+  [types.SET_VOLUME](state, action) {
+    return action.volume;
+  }
+})
