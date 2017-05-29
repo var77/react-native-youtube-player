@@ -37,13 +37,12 @@ class Downloads extends Component {
           <FlatList
             data={this.props.songs}
             renderItem={({item, index}) => (<Song
-                    key={index}
                     onPress={this.onSongPlay.bind(this, index)}
                     songName={item.title}
                     artistName={item.artist}
                     songImage={item.thumb}
                     deleteSong={this.deleteSong.bind(this, index)}
-                    keyExtractor={(item, index) => item.id}
+                    keyExtractor={item => item.id}
             />)}
           />
         </View>

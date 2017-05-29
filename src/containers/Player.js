@@ -45,6 +45,7 @@ class Player extends Component {
   }
 
   toggleShuffle(){
+    return this.props.setShuffle(!this.props.shuffle)
     return this.setState({shuffle: !this.state.shuffle});
     //TODO
     if(this.state.shuffle) {
@@ -65,7 +66,7 @@ class Player extends Component {
   }
 
   goForward() {
-    let index = this.state.shuffle? this.randomSongIndex() : null;
+    let index = this.props.shuffle? this.randomSongIndex() : null;
     this.props.goForward(index);
   }
 
@@ -154,7 +155,7 @@ class Player extends Component {
         />
         <View style={ Styles.controls }>
           <ShuffleButton
-            shuffle={this.state.shuffle}
+            shuffle={this.props.shuffle}
             toggleShuffle={this.toggleShuffle.bind(this)}
             disabled={this.props.search}
           />
@@ -167,7 +168,7 @@ class Player extends Component {
           />
           <ForwardButton
             songs={this.props.songs}
-            shuffle={this.state.shuffle}
+            shuffle={this.props.shuffle}
             songIndex={this.props.songIndex}
             goForward={this.goForward.bind(this)}
             disabled={this.props.search}
@@ -194,7 +195,8 @@ function mapStateToProps(store) {
       duration: store.songDuration,
       playing: store.playing,
       currentTime: store.songProgress,
-      songIndex: store.songIndex
+      songIndex: store.songIndex,
+      shuffle: store.shuffle
     }
 }
 

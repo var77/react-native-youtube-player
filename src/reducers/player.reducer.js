@@ -30,3 +30,9 @@ export const playlist = createReducer([], {
     return action.songs;
   }
 })
+
+export const shuffle = createReducer(false, {
+  [types.SET_SHUFFLE](state, action) {
+    return action.status;
+  }
+})

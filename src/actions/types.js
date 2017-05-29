@@ -7,3 +7,4 @@ export const SET_DURATION = 'SET_DURATION';
 export const SET_PROGRESS = 'SET_PROGRESS';
 export const SET_SONG_INDEX = 'SET_SONG_INDEX';
 export const SET_PLAYLIST = 'SET_PLAYLIST';
+export const SET_SHUFFLE = 'SET_SHUFFLE';

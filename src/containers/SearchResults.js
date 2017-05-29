@@ -42,8 +42,7 @@ class SearchResults extends Component {
         data={this.props.searchResults}
         renderItem={({item, index}) => {
           return (<Song
-                keyExtractor={(item, index) => item.id}
-                key={item.id}
+                keyExtractor={item => item.id}
                 onPress={this.songClick.bind(this, item, index, item.downloaded)}
                 songName={item.title}
                 artistName={item.artist}

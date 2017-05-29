@@ -30,6 +30,13 @@ export function setSongIndex(index) {
   }
 }
 
+export function setShuffle(status) {
+  return {
+    type: types.SET_SHUFFLE,
+    status
+  }
+}
+
 export function setPlaylist(songs) {
   return {
     type: types.SET_PLAYLIST,

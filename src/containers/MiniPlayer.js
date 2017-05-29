@@ -68,16 +68,33 @@ class Player extends Component {
     }
   }
 
-  goForward(_index){
+  goForward() {
+    let _index = this.props.shuffle? this.randomSongIndex() : null;
+    this.refs.audio.seek(0);
+    this.setTime(0);
     if(_.isNumber(_index) || this.props.songIndex + 1 != this.props.songs.length) {
       let index = _.isNumber(_index)? _index: this.props.songIndex + 1;
-      this.props.setPlayingSong(index);
+      return this.props.setPlayingSong(index);
     }
+    this.props.setPlayingSong(0);
+    this.props.setPlaying(false);
+    let song = this.props.songs[0];
+    MusicControl.updatePlayback({
+      title: song.title,
+      artwork: song.thumb,
+      artist: song.artist,
+      state: MusicControl.STATE_PAUSED,
+      elapsedTime: 0
+    });
   }
 
   randomSongIndex(){
-    return Math.floor(Math.random() * 1000000000) % this.props.songs.length;
-  }
+    let index = Math.floor(Math.random() * 1000000000) % this.props.songs.length;
+    if(index == this.props.songIndex && this.props.songs.length !== 1) {
+      return this.randomSongIndex();
+    }
+    return index;
+ }
 
   setTime(params) {
       this.props.setProgress(params.currentTime);
@@ -96,6 +113,7 @@ class Player extends Component {
 
   onEnd() {
     this.props.setPlaying(false);
+    this.goForward();
   }
 
   openPlayer() {
@@ -187,7 +205,8 @@ function mapStateToProps(store) {
       duration: store.songDuration,
       playing: store.playing,
       songs: store.playlist,
-      songIndex: store.songIndex
+      songIndex: store.songIndex,
+      shuffle: store.shuffle
     }
 }
 
