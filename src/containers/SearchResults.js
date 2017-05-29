@@ -4,15 +4,14 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  Image
 } from 'react-native';
 
-import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import ActionCreators from '../actions';
 import Styles from '../styles';
-import * as Progress from 'react-native-progress';
 import Song from '../components/Song';
 import * as Utils from '../helpers/utils';
 
@@ -36,6 +35,13 @@ class SearchResults extends Component {
   }
 
   render() {
+    let noVideoBox = this.props.loading ? (
+        <Image
+            style={{width: 100, height: 100}}
+            source={{uri: 'http://www.miat.com/images/loading4.gif'}}
+        />
+    ) : <Text>No Search Results</Text>;
+
     return (
       this.props.searchResults.length?<FlatList
         style={Styles.fullWidth}
@@ -53,7 +59,7 @@ class SearchResults extends Component {
                 />)}}
       />:(
         <View style={Styles.centerContainer}>
-          <Text>No Search Results</Text>
+            {noVideoBox}
         </View>
         )
     );
@@ -68,7 +74,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(store) {
     return {
       searchResults: store.searchResults,
-      songs: store.songs
+      songs: store.songs,
+      loading: store.loading
     }
 }
 

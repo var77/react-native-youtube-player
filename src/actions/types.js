@@ -2,6 +2,7 @@ export const DOWNLOADED = 'DOWNLOADED';
 export const SONGS = 'SONGS';
 export const PROGRESS = 'PROGRESS';
 export const SEARCH = 'SEARCH';
+export const LOADING = 'LOADING';
 export const SET_PLAYING = 'SET_PLAYING';
 export const SET_DURATION = 'SET_DURATION';
 export const SET_PROGRESS = 'SET_PROGRESS';

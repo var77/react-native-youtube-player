@@ -19,10 +19,16 @@ export const progreses = createReducer({}, {
     state[action.id] = action.progress;
     return {...state};
   }
-})
+});
 
 export const searchResults = createReducer([], {
   [types.SEARCH](state, action) {
     return action.res;
   }
-})
+});
+
+export const loading = createReducer(false, {
+    [types.LOADING](state, action) {
+        return action.res;
+    }
+});
