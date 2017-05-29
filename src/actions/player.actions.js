@@ -16,7 +16,7 @@ export function setSongDuration(duration) {
   }
 }
 
-export function setProgress(time) {
+export function setSongProgress(time) {
   return {
     type: types.SET_PROGRESS,
     time

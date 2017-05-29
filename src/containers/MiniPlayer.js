@@ -71,7 +71,7 @@ class Player extends Component {
   goForward() {
     let _index = this.props.shuffle? this.randomSongIndex() : null;
     this.refs.audio.seek(0);
-    this.setTime(0);
+    this.setTime({currentTime: 0});
     if(_.isNumber(_index) || this.props.songIndex + 1 != this.props.songs.length) {
       let index = _.isNumber(_index)? _index: this.props.songIndex + 1;
       return this.props.setPlayingSong(index);
@@ -97,7 +97,7 @@ class Player extends Component {
  }
 
   setTime(params) {
-      this.props.setProgress(params.currentTime);
+      this.props.setSongProgress(params.currentTime);
       this.setState({currentTime: params.currentTime});
   }
 
@@ -134,6 +134,8 @@ class Player extends Component {
               ref="audio"
               paused={!this.props.playing}
               playInBackground={true}
+              playWhenInactive={true}
+              ignoreSilentSwitch={"ignore"}
               onLoad={ this.onLoad.bind(this) }
               onProgress={ this.setTime.bind(this) }
               onEnd={ this.onEnd.bind(this) }
