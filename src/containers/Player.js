@@ -128,9 +128,6 @@ class Player extends Component {
             {this.props.songs[this.props.songIndex].artist}
           </Text>
         </View>
-        <View style={ Styles.headerClose }>
-          <FontAwesome onPress={ Actions.pop } name="chevron-left" size={15} color="#fff" />
-        </View>
         <DownloadButton
           download={this.props.searchedSongs}
           downloading={this.props.songs[this.props.songIndex].downloading}
@@ -141,7 +138,7 @@ class Player extends Component {
         <Image
           style={ Styles.songImage }
           source={{uri: (Platform.OS == 'android'?"file://": "") + this.props.songs[this.props.songIndex].thumb}}/>
-        <Text style={ Styles.songTitle }>
+        <Text style={ Styles.songTitle } numberOfLines={1}>
           {this.props.songs[this.props.songIndex].title}
         </Text>
         <SongSlider

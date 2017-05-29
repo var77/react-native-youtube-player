@@ -53,8 +53,8 @@ function DownloadedSong() {
           style={Styles.songTitleImage}
         />
         <View style={Styles.songTitleContainer}>
-          <Text style={Styles.songArtistText}>{this.props.artistName || "Unknown Artist"}</Text>
-          <Text style={Styles.songTitleText}>{this.props.songName || "Unknown Song"}</Text>
+          <Text style={Styles.songArtistText} numberOfLines={1}>{this.props.artistName || "Unknown Artist"}</Text>
+          <Text style={Styles.songTitleText} numberOfLines={1}>{this.props.songName || "Unknown Song"}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -100,8 +100,8 @@ function SearchedSong() {
         style={Styles.songTitleImage}
       />
       <View style={Styles.songTitleContainer}>
-        <Text style={Styles.songArtistText}>{this.props.artistName || "Unknown Artist"}</Text>
-        <Text style={Styles.songTitleText}>{this.props.songName || "Unknown Song"}</Text>
+        <Text style={Styles.songArtistText} numberOfLines={1}>{this.props.artistName || "Unknown Artist"}</Text>
+        <Text style={Styles.songTitleText} numberOfLines={1}>{this.props.songName || "Unknown Song"}</Text>
       </View>
     </View>
     {renderProgressBar.call(this)}

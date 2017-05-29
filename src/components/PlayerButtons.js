@@ -32,7 +32,7 @@ export class ForwardButton extends Component {
 
 export class BackwardButton extends Component {
   render() {
-    return null//<FontAwesome onPress={ this.props.goBackward } style={ Styles.back } name="backward" size={25} color="#fff" />
+    return <FontAwesome onPress={ this.props.goBackward } style={ Styles.back } name="backward" size={25} color="#fff" />
   }
 }
 
