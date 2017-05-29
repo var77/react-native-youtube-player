@@ -41,7 +41,7 @@ class Downloads extends Component {
                     songName={item.title}
                     artistName={item.artist}
                     songImage={item.thumb}
-                    deleteSong={this.deleteSong.bind(this, index)}
+                    deleteMusic={this.deleteSong.bind(this, index)}
                     keyExtractor={item => item.id}
             />)}
           />

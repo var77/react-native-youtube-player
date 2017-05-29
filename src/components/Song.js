@@ -25,7 +25,7 @@ class Song extends Component {
   swipeBtns = [{
       text: 'Delete',
       backgroundColor: 'red',
-      onPress: () => { this.props.deleteSong() }
+      onPress: () => { this.props.deleteMusic() }
     }]
 
   async downloadMusic(song) {
