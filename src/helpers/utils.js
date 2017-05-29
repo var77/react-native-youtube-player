@@ -64,5 +64,12 @@ export async function getSongInfo(path) {
   let res = await fetch(path);
   let data = await res.json();
   if(data.status) return data;
-  console.warn(data.error);
+  throw data.error;
+}
+
+export async function setSongsToStorage(songs) {
+  let storageSongs = await getSongsFromStorage();
+  let newSongs = [...storageSongs, ...songs];
+  await AsyncStorage.setItem('songs', JSON.stringify(newSongs));
+  return newSongs;
 }

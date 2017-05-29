@@ -18,10 +18,6 @@ import { Actions } from 'react-native-router-flux';
 class Downloads extends Component {
   state = {page: 'download'}
 
-  componentDidMount() {
-    this.props.getSongs();
-  }
-
   onSongPlay(index) {
     this.props.setPlayingSong(index, this.props.songs);
   }
@@ -33,7 +29,7 @@ class Downloads extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <View style={[Styles.homeContainer, {paddingBottom: 50}]}>
+        <View style={Styles.homeContainer}>
           <FlatList
             data={this.props.songs}
             renderItem={({item, index}) => (<Song

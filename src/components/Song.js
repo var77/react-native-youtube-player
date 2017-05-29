@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  Platform
+  Platform,
+  ActivityIndicator
 } from 'react-native';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -30,7 +31,7 @@ class Song extends Component {
 
   async downloadMusic(song) {
     this.setState({downloading: true});
-    await this.props.downloadMusic(song);
+    await this.props.downloadMusic(song, song.pathChanged);
     this.setState({downloading: false});
   }
 
@@ -62,6 +63,10 @@ function DownloadedSong() {
 
 function renderProgressBar() {
     let song = this.props.searchResults[this.props.songIndex];
+    if(song.preparing) {
+      return <ActivityIndicator animating={true} size='small'/>
+    }
+
     if(song.downloaded) {
       return (
         <View style={{width: 60, paddingLeft: 20}}>
@@ -87,7 +92,8 @@ function renderProgressBar() {
 }
 
 function SearchedSong() {
-  return (<TouchableOpacity style={Styles.searchSongContainer} onPress={this.props.onPress}>
+  let song = this.props.searchResults[this.props.songIndex];
+  return (<TouchableOpacity style={Styles.searchSongContainer} onPress={() => this.props.onPress(song.downloaded)}>
     <View style={[Styles.songView, {width: width - 60}]}>
       <Image
         source={{uri: this.props.songImage || this.state.songImage}}

@@ -1,6 +1,7 @@
 import * as types from './types';
 import * as Utils from '../helpers/utils';
 import {setSongs} from './music.actions';
+import {setSearchResults} from './search.actions';
 
 export function setPlaying(status) {
   return {
@@ -44,8 +45,19 @@ export function setPlaylist(songs) {
   }
 }
 
-export function setPlayingSong(index, playlist) {
-  return dispatch => {
+export function setPlayingSong(index, playlist, changePath) {
+  return async dispatch => {
+    if(changePath) {
+      let song = playlist[index];
+      song.preparing = true;
+      dispatch(setSearchResults([...playlist]));
+      let songInfo = await Utils.getSongInfo(song.path);
+      song.path = songInfo.url;
+      song.pathChanged = true;
+      song.preparing = false;
+      dispatch(setSearchResults([...playlist]));
+    }
+
     if(playlist) dispatch(setPlaylist(playlist));
     dispatch(setSongIndex(index))
     dispatch(setPlaying(true))

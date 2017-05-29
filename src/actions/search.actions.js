@@ -27,7 +27,7 @@ async function setDownloadedSongs(songs) {
       findedSong.downloaded = true;
       return findedSong;
     }
-    
+
     return song;
   });
 }

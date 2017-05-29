@@ -32,7 +32,7 @@ export class ForwardButton extends Component {
 
 export class BackwardButton extends Component {
   render() {
-    return <FontAwesome onPress={ this.props.goBackward } style={ Styles.back } name="backward" size={25} color="#fff" />
+    return null//<FontAwesome onPress={ this.props.goBackward } style={ Styles.back } name="backward" size={25} color="#fff" />
   }
 }
 
@@ -50,7 +50,7 @@ export class ShuffleButton extends Component {
 
 export class DownloadButton extends Component {
   render() {
-    if(!this.props.download || this.props.downloading || this.props.downloaded) {
+    if(this.props.downloading || this.props.downloaded) {
       return  <FontAwesome style={ Styles.downloadButton } name="download" size={25} color="#333" />;
     }
     return  <FontAwesome onPress={ this.props.downloadMusic } style={ Styles.downloadButton } name="download" size={25} color="#fff" />;

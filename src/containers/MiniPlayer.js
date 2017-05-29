@@ -74,11 +74,14 @@ class Player extends Component {
     this.setTime({currentTime: 0});
     if(_.isNumber(_index) || this.props.songIndex + 1 != this.props.songs.length) {
       let index = _.isNumber(_index)? _index: this.props.songIndex + 1;
-      return this.props.setPlayingSong(index);
+      let song = this.props.songs[index];
+      let changePath = (!song.downloaded && !song.pathChanged);
+      return this.props.setPlayingSong(index, changePath? this.props.songs: null, changePath);
     }
-    this.props.setPlayingSong(0);
-    this.props.setPlaying(false);
     let song = this.props.songs[0];
+    let changePath = (!song.downloaded && !song.pathChanged);
+    this.props.setPlayingSong(0, changePath? this.props.songs: null, changePath);
+    this.props.setPlaying(false);
     MusicControl.updatePlayback({
       title: song.title,
       artwork: song.thumb,

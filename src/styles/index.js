@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   homeContainer: {
     flex: 1,
     alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: 100,
     paddingTop: 64,
     },
   searchInput: {

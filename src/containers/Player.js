@@ -107,8 +107,8 @@ class Player extends Component {
   songImage = require('../img/music.jpg');
 
   renderProgressBar() {
-    if(this.props.searchedSongs) {
-      let song = this.props.songs[this.props.songIndex];
+    let song = this.props.songs[this.props.songIndex];
+    if(song.downloading) {
       return <Progress.Bar progress={this.props.progreses[song.id]} width={width} color="#fff" borderColor="transparent"/>
     }
     return null
@@ -135,7 +135,7 @@ class Player extends Component {
           download={this.props.searchedSongs}
           downloading={this.props.songs[this.props.songIndex].downloading}
           downloaded={this.props.downloaded}
-          downloadMusic={() => this.props.onMusicDownload(this.props.songs[this.props.songIndex], this.props.songs[this.props.songIndex].pathChanged)}
+          downloadMusic={() => this.props.downloadMusic(this.props.songs[this.props.songIndex], this.props.songs[this.props.songIndex].pathChanged)}
         />
         {this.renderProgressBar()}
         <Image
