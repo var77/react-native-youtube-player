@@ -1,10 +1,8 @@
 import * as types from './types';
-import Config from '../config';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as Utils from '../helpers/utils';
 import {AsyncStorage} from 'react-native';
 import RNFS from 'react-native-fs';
-import {setSearchResults} from './search.actions';
 
 let DOWNLOADING_SONGS = [], DOWNLOADED_SONGS = [];
 
