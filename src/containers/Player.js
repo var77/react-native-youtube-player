@@ -46,20 +46,7 @@ class Player extends Component {
   }
 
   toggleShuffle(){
-    return this.props.setShuffle(!this.props.shuffle)
-    return this.setState({shuffle: !this.state.shuffle});
-    //TODO
-    if(this.state.shuffle) {
-      this.props.setPlaylist(this.state.originalSongs);
-    } else {
-      this.setState({originalSongs: this.props.songs});
-      let shuffledSongs = _.shuffle(this.props.songs);
-      let newIndex = _.findIndex(shuffledSongs, {id: this.props.songs[this.props.songIndex].id});
-      let songToChangeIndex = shuffledSongs[this.props.songIndex];
-      shuffledSongs[this.props.songIndex] = this.props.songs[this.props.songIndex];
-      shuffledSongs[newIndex] = songToChangeIndex;
-      this.props.setPlaylist(shuffledSongs);
-    }
+    this.props.toggleShuffle(!this.props.shuffle);
   }
 
   goBackward() {
@@ -67,16 +54,7 @@ class Player extends Component {
   }
 
   goForward() {
-    let index = this.props.shuffle? this.randomSongIndex() : null;
-    this.props.goForward(index);
-  }
-
-  randomSongIndex(){
-    let index = Math.floor(Math.random() * 1000000000) % this.props.songs.length;
-    if(index == this.props.songIndex && this.props.songs.length !== 1) {
-      return this.randomSongIndex();
-    }
-    return index;
+    this.props.goForward();
   }
 
   setTime(params) {

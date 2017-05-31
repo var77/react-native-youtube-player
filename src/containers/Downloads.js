@@ -4,7 +4,8 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  List
 } from 'react-native';
 
 import Styles from '../styles';
@@ -12,10 +13,25 @@ import Song from '../components/Song';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import ActionCreators from '../actions';
-import BottomTabs from '../components/BottomTabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
+let self = null;
 class Downloads extends Component {
   state = {page: 'download'}
+  constructor(props) {
+      super(props);
+      self = this;
+  }
+
+  static renderRightButton(props){
+      return (<TouchableOpacity onPress={Downloads.onRight}>
+          <Icon name="refresh" size={20} />
+     </TouchableOpacity>);
+  }
+
+  static onRight() {
+    self && self.props.recoverDeletedSongs(self.props.songs)
+  }
 
   onSongPlay(index) {
     this.props.setPlayingSong(index, this.props.songs);
@@ -37,12 +53,11 @@ class Downloads extends Component {
                     artistName={item.artist}
                     songImage={item.thumb}
                     deleteMusic={this.deleteSong.bind(this, index)}
-                    keyExtractor={item => item.id}
+                    songIndex={index}
+                    id={item.id}
             />)}
           />
         </View>
-        <BottomTabs page={this.state.page}/>
-
       </View>);
   }
 }

@@ -56,18 +56,19 @@ function DownloadedSong() {
           <Text style={Styles.songArtistText} numberOfLines={1}>{this.props.artistName || "Unknown Artist"}</Text>
           <Text style={Styles.songTitleText} numberOfLines={1}>{this.props.songName || "Unknown Song"}</Text>
         </View>
+        {renderProgressBar.call(this, true)}
       </View>
     </TouchableOpacity>
   </Swipeout>)
 }
 
-function renderProgressBar() {
-    let song = this.props.searchResults[this.props.songIndex];
+function renderProgressBar(downloads) {
+    let song = this.props[downloads? 'songs': 'searchResults'][this.props.songIndex];
     if(song.preparing) {
       return <ActivityIndicator animating={true} size='small'/>
     }
 
-    if(song.downloaded) {
+    if(song.downloaded && !downloads) {
       return (
         <View style={{width: 60, paddingLeft: 20}}>
          <Icon name='md-play' size={40}/>
@@ -83,6 +84,8 @@ function renderProgressBar() {
         tintColor="#00e0ff"
         backgroundColor="#3d5875" />)
     }
+
+    if(downloads) return null;
 
    return (
      <TouchableOpacity onPress={() => !song.downloading && this.downloadMusic(song)} style={{width: 60, paddingLeft: 20}}>

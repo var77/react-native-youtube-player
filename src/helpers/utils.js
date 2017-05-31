@@ -1,5 +1,7 @@
 import {AsyncStorage} from 'react-native';
 import Config from '../config';
+import RNFS from 'react-native-fs';
+import _ from 'underscore';
 
 function withLeadingZero(amount){
   if (amount < 10 ){
@@ -39,7 +41,8 @@ export function filterSearchResults(res) {
       artist: item.snippet.channelTitle,
       title: item.snippet.title,
       thumb: item.snippet.thumbnails.high.url,
-      path: getSongUrl(item.id.videoId)
+      path: getSongUrl(item.id.videoId),
+      key: item.id.videoId
     }
   });
 }
@@ -60,16 +63,27 @@ export async function getSongFromStorage(id) {
   return _.findWhere(JSON.parse(songs), {id});
 }
 
-export async function getSongInfo(path) {
-  let res = await fetch(path);
+export async function getSongInfo(path, recoverId) {
+  let res = await fetch(recoverId? getSongUrl(recoverId): path);
   let data = await res.json();
   if(data.status) return data;
   throw data.error;
 }
 
-export async function setSongsToStorage(songs) {
+export async function setSongsToStorage(songs, recover) {
   let storageSongs = await getSongsFromStorage();
+  storageSongs = recover?deleteRecoverSongs([...storageSongs], [...songs]): storageSongs;
   let newSongs = [...storageSongs, ...songs];
   await AsyncStorage.setItem('songs', JSON.stringify(newSongs));
   return newSongs;
+}
+
+export function getThumbUrl(id) {
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+}
+
+function deleteRecoverSongs(oldSongs, newSongs) {
+  return _.filter(oldSongs, song => {
+    return !_.findWhere(newSongs, {id: song.id});
+  });
 }

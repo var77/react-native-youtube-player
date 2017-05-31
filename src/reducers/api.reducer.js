@@ -1,5 +1,6 @@
 import createReducer from '../helpers/createReducer';
 import * as types from '../actions/types';
+import _ from 'underscore';
 
 export const songs = createReducer([], {
     [types.DOWNLOADED](state, action) {

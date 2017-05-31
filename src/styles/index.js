@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
     height: 300
   },
   songImageSmall: {
-    width: 40,
-    height: 40
+    width: 45,
+    height: 45
   },
   songTitle: {
     color: "white",
@@ -196,14 +196,14 @@ const styles = StyleSheet.create({
     bottom: 50,
     width,
     height: 50,
-    backgroundColor: 'rgba(0, 0, 0, .5)'
+    backgroundColor: '#eaeff7'
   },
   minimizedPlayer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 5
+    padding: 10
   }
 });
 

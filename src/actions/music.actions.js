@@ -5,25 +5,26 @@ import * as Utils from '../helpers/utils';
 import {AsyncStorage} from 'react-native';
 import RNFS from 'react-native-fs';
 import {setSearchResults} from './search.actions';
+import _ from 'underscore';
 
 let DOWNLOADING_SONGS = [], DOWNLOADED_SONGS = [];
 
-export function downloadMusic(song, changedPath) {
+export function downloadMusic(song, changedPath, recover) {
     return async (dispatch) => {
       try {
         if(song.downloading) return;
         song.preparing = true;
         song.downloading = true;
         let songs = await Utils.getSongsFromStorage();
-        if(Utils.findSongInCollection(song.id, songs)) return {};
+        if(!recover && Utils.findSongInCollection(song.id, songs)) return {};
         DOWNLOADING_SONGS.push(song);
         let dirs = RNFetchBlob.fs.dirs;
         let songInfo = {url: song.path}
         if(!changedPath) {
-          songInfo = await Utils.getSongInfo(song.path);
+          songInfo = await Utils.getSongInfo(song.path, song.id);
         }
         song.preparing = false;
-        const songRes = await RNFetchBlob
+         const songRes = await RNFetchBlob
                         .config({
                           path: `${dirs.DocumentDir}/${song.id}.mp3`
                         })
@@ -35,15 +36,17 @@ export function downloadMusic(song, changedPath) {
                           .config({
                             path: `${dirs.DocumentDir}/${song.id}.jpg`
                           })
-                          .fetch('GET', song.thumb, {});
+                          .fetch('GET', recover? Utils.getThumbUrl(song.id): song.thumb, {});
+
           song.downloading = false;
           song.downloaded = true;
           song.path = songRes.path();
           song.thumb = imgRes.path();
+          song.key = song.id;
           DOWNLOADING_SONGS.pop();
           DOWNLOADED_SONGS.push(song);
           if(!DOWNLOADING_SONGS.length) {
-            let updatedSongs = await Utils.setSongsToStorage(DOWNLOADED_SONGS);
+            let updatedSongs = await Utils.setSongsToStorage(DOWNLOADED_SONGS, recover);
             DOWNLOADED_SONGS = [];
             return dispatch(setSongs(updatedSongs));
           }
@@ -95,5 +98,13 @@ export function setProgress(progress, id) {
     type: types.PROGRESS,
     progress,
     id
+  }
+}
+
+export function recoverDeletedSongs(songs) {
+  return async dispatch => {
+    let promises = _.map(songs, song => RNFS.exists(song.path));
+    let results = await Promise.all(promises);
+    _.each(results, (res, index) => !res && dispatch(downloadMusic(songs[index], false, true)));
   }
 }

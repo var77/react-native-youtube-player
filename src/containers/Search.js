@@ -13,20 +13,15 @@ import ActionCreators from '../actions';
 import Styles from '../styles';
 import { Hideo } from 'react-native-textinput-effects';
 import SearchResults from './SearchResults';
-import BottomTabs from '../components/BottomTabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 class Search extends Component {
   state = {searchQuery: '', page: 'search'}
 
-  componentDidMount() {
-    //this.props.getSongs();
-  }
-
   render() {
     return (
       <View style={{flex: 1}}>
-        <View style={Styles.homeContainer}>
+        <View style={[Styles.homeContainer, {paddingBottom: !this.props.songs.length? 50: 100}]}>
           <View style={Styles.searchInputContainer}>
             <Hideo
               iconClass={FontAwesome}
@@ -42,7 +37,7 @@ class Search extends Component {
             </View>
             <SearchResults />
          </View>
-          <BottomTabs page={this.state.page}/>
+
         </View>
    );
   }
@@ -53,7 +48,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(store) {
-    return { }
+    return {
+      songs: store.playlist
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

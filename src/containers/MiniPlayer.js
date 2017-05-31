@@ -30,7 +30,7 @@ class Player extends Component {
     this.state = {
       playing: false,
       muted: false,
-      shuffle: false
+      originalPlaylist: null
     };
   }
 
@@ -69,11 +69,17 @@ class Player extends Component {
   }
 
   goForward() {
-    let _index = this.props.shuffle? this.randomSongIndex() : null;
     this.refs.audio.seek(0);
     this.setTime({currentTime: 0});
-    if(_.isNumber(_index) || this.props.songIndex + 1 != this.props.songs.length) {
-      let index = _.isNumber(_index)? _index: this.props.songIndex + 1;
+
+    if(this.props.shuffle && this.props.songIndex + 1 == this.props.songs.length) {
+       return this.toggleShuffle(true, true);
+     }
+
+   if(this.props.songs.length == 1) return;
+
+    if(this.props.songIndex + 1 != this.props.songs.length) {
+      let index = this.props.songIndex + 1;
       let song = this.props.songs[index];
       let changePath = (!song.downloaded && !song.pathChanged);
       return this.props.setPlayingSong(index, changePath? this.props.songs: null, changePath);
@@ -90,14 +96,6 @@ class Player extends Component {
       elapsedTime: 0
     });
   }
-
-  randomSongIndex(){
-    let index = Math.floor(Math.random() * 1000000000) % this.props.songs.length;
-    if(index == this.props.songIndex && this.props.songs.length !== 1) {
-      return this.randomSongIndex();
-    }
-    return index;
- }
 
   setTime(params) {
       this.props.setSongProgress(params.currentTime);
@@ -124,7 +122,8 @@ class Player extends Component {
     Actions.player({
       togglePlay: this.togglePlay.bind(this),
       goBackward: this.goBackward.bind(this),
-      goForward: this.goForward.bind(this)
+      goForward: this.goForward.bind(this),
+      toggleShuffle: this.toggleShuffle.bind(this)
     });
   }
 
@@ -146,6 +145,38 @@ class Player extends Component {
               repeat={false}/>);
       }
       return null;
+  }
+
+  toggleShuffle(status, dontChangeIndex) {
+    this.props.setShuffle(status);
+    if(this.props.songs.length == 1) return this.props.setPlayingSong(0);
+
+    if(!status) {
+      let playingSong = this.props.songs[this.props.songIndex];
+      let originalIndex = _.findIndex(this.state.originalPlaylist, {id: playingSong.id});
+      this.props.setPlayingSong(originalIndex, this.state.originalSongs);
+      this.setState({originalPlaylist: null});
+    }
+    this.setState({originalPlaylist: this.state.originalPlaylist || [...this.props.songs]});
+    let shuffledSongs = _.shuffle(this.props.songs);
+    if(dontChangeIndex) {
+      let songId = this.props.songs[this.props.songIndex].id;
+      if(shuffledSongs[0].id == songId) {
+          shuffledSongs.push(shuffledSongs.shift());
+      }
+
+      return this.props.setPlayingSong(0, shuffledSongs);
+    }
+
+    this.transferSongs(0, shuffledSongs);
+    this.props.setPlayingSong(0, shuffledSongs);
+  }
+
+  transferSongs(indexToChange, shuffledSongs) {
+    let newIndex = _.findIndex(shuffledSongs, {id: this.props.songs[this.props.songIndex].id});
+    let songToChangeIndex = shuffledSongs[indexToChange];
+    shuffledSongs[newIndex] = songToChangeIndex;
+    shuffledSongs[indexToChange] = this.props.songs[this.props.songIndex];
   }
 
   async componentDidMount() {
@@ -183,7 +214,7 @@ class Player extends Component {
               source={{uri: (Platform.OS == 'android'?"file://": "") + song.thumb}}/>
             }
               <Text>{text.slice(0, 30)}...</Text>
-              <FontAwesome onPress={ () => this.togglePlay(!this.props.playing) } name={this.props.playing?"stop-circle": "play-circle"} size={25} />
+              <FontAwesome onPress={ () => this.togglePlay(!this.props.playing) } name={this.props.playing?"stop": "play"} size={20} />
               {renderForwardButton.call(this)}
           </View>
         </TouchableOpacity>
@@ -193,9 +224,9 @@ class Player extends Component {
 
 function renderForwardButton() {
   if(this.props.songIndex + 1 === this.props.songs.length ) {
-       return <FontAwesome name="forward" size={25} color="#333" />
+       return <FontAwesome name="forward" size={20} color="#333" />
   }
-  return <FontAwesome onPress={ this.goForward.bind(this)} name="forward" size={25} />
+  return <FontAwesome onPress={ this.goForward.bind(this)} name="forward" size={20} />
 }
 
 function mapDispatchToProps(dispatch) {
