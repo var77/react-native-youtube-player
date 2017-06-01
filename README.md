@@ -1,4 +1,4 @@
-# react-native-youtube-player
+# JPlayer <img src=""https://res.cloudinary.com/just/image/upload/v1496339576/logo_ichcbp.png width="64px"/>
 ### Screenshots
 <img src="https://res.cloudinary.com/just/image/upload/v1485982719/ice_screenshot_20170201-125648_ngjhbo.png" alt="Downloads" width="180"/>
 <img src="https://res.cloudinary.com/just/image/upload/v1485982719/ice_screenshot_20170201-125703_cyvdki.png" alt="Search" width="180px"/>
@@ -14,13 +14,10 @@ react-native run-ios
 
 ```
 ### Description
-react-native-youtube-player is a music player which uses YouTube API to search videos and youtubeinmp3 API to convert video to mp3 and download it for offline use.
+react-native-youtube-player is a music player which uses YouTube API to search videos and <a href="https://github.com/var77/youtube-audio">youtube-audio</a> API to convert video to mp3 and download it for offline use.
 
 ### Contributors
 
 - [Varik Matevosyan](https://github.com/var77)
 
 >Special thanks to [devnacho](https://github.com/devnacho) for his [react-native-music-player]( https://github.com/devnacho/react-native-music-player) and [Tanguy Antoine](https://github.com/tanguyantoine) for his [react-native-music-control]( https://github.com/tanguyantoine/react-native-music-control).
-
-### TODO
-- Implement and test for android

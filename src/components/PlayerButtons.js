@@ -38,7 +38,7 @@ export class BackwardButton extends Component {
 
 export class VolumeButton extends Component {
   render() {
-    return <FontAwesome onPress={ this.props.toggleVolume } style={ Styles.volume } name={this.props.muted?"volume-off": "volume-up"} size={18} color="#fff" />;
+    return <FontAwesome onPress={ this.props.toggleVolume } style={ Styles.volume } name={this.props.volume?"volume-up": "volume-off"} size={18} color="#fff" />;
   }
 }
 

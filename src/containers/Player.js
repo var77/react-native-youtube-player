@@ -41,8 +41,7 @@ class Player extends Component {
   }
 
   toggleVolume(){
-    this.props.setVolume(this.state.muted? 1: 0);
-    this.setState({ muted: !this.state.muted });
+    this.props.setVolume(Math.abs(this.props.volume - 1));
   }
 
   toggleShuffle(){
@@ -150,7 +149,7 @@ class Player extends Component {
             disabled={this.props.search}
           />
           <VolumeButton
-            muted={this.state.muted}
+            volume={this.props.volume}
             toggleVolume={this.toggleVolume.bind(this)}
           />
         </View>
@@ -172,7 +171,8 @@ function mapStateToProps(store) {
       playing: store.playing,
       currentTime: store.songProgress,
       songIndex: store.songIndex,
-      shuffle: store.shuffle
+      shuffle: store.shuffle,
+      volume: store.volume
     }
 }
 
