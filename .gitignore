@@ -52,3 +52,4 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 yarn.lock
+src/config/index.js
