@@ -10,6 +10,8 @@ react-native link
 react-native run-ios
 
 ```
+>Put your Google API key in src/configs/index.js - YOUTUBE_API_KEY
+
 ### Description
 JPlayer is a music player which uses YouTube API to search videos and <a href="https://github.com/var77/youtube-audio">youtube-audio</a> API to convert video to mp3 and download it for offline use.
 
