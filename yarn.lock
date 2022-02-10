@@ -2993,6 +2993,12 @@ react-native-button@^1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/react-native-button/-/react-native-button-1.8.2.tgz#49e5cadd22ee443adea52a85539d288aa2117ade"
 
+react-native-circular-progress@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-circular-progress/-/react-native-circular-progress-0.0.8.tgz#53ccdbe57357ce2459f8ab1b67119a3e2a5014b4"
+  dependencies:
+    art "^0.10.0"
+
 react-native-experimental-navigation@0.27.x:
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/react-native-experimental-navigation/-/react-native-experimental-navigation-0.27.0.tgz#1b20ad95b9f7187d4f1735708a5c1080693a94f1"
@@ -3036,22 +3042,12 @@ react-native-router-flux@^3.39.2:
     react-native-tabs "^1.0.9"
     react-static-container "1.0.1"
 
-react-native-scrollable-tab-view@^0.6.6:
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/react-native-scrollable-tab-view/-/react-native-scrollable-tab-view-0.6.6.tgz#d49d21060745845e9c59e3d39a2bacd4056a8b59"
-  dependencies:
-    react-timer-mixin "^0.13.3"
-
 react-native-slider@^0.9.1:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/react-native-slider/-/react-native-slider-0.9.1.tgz#f8ea5e3c48aa3577656719b911fd7dd4c62bf81a"
   dependencies:
     react-addons-shallow-compare "^15.0.2"
     style-equal "^1.0.0"
-
-react-native-sound@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.10.1.tgz#c6afa5114cea6e39f479a2c67d6d843894ed745c"
 
 react-native-swipe-out@^2.0.14:
   version "2.0.14"
@@ -3197,7 +3193,7 @@ react-test-renderer@16.0.0-alpha.6:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
 
-react-timer-mixin@^0.13.2, react-timer-mixin@^0.13.3:
+react-timer-mixin@^0.13.2:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/react-timer-mixin/-/react-timer-mixin-0.13.3.tgz#0da8b9f807ec07dc3e854d082c737c65605b3d22"
 
@@ -3815,8 +3811,8 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 ua-parser-js@^0.7.9:
-  version "0.7.12"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.12.tgz#04c81a99bdd5dc52263ea29d24c6bf8d4818a4bb"
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
 
 uglify-js@2.7.5, uglify-js@^2.6:
   version "2.7.5"
@@ -3850,6 +3846,10 @@ ultron@1.0.x:
 ultron@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.0.tgz#b07a2e6a541a815fc6a34ccd4533baec307ca864"
+
+underscore@^1.8.3:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.2.tgz#276cea1e8b9722a8dbed0100a407dda572125881"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
